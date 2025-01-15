@@ -1,12 +1,13 @@
 <template>
 
     <div>
-        <div :class="(index%2 == 0 ? 'task-bg-primary' : 'task-bg-secondary' )+' my-2 py-3 px-5 row '+ (task.status ? 'task-completed' : '')">
+        <div :class="(index%2 == 0 ? 'task-bg-primary' : 'task-bg-secondary' )+' my-2 py-3 px-5 row align-content-center justify-content-center '+ (task.status ? 'task-done' : '')">
             <div class="col-1 align-content-center">
                 <input class="rounded form-check-input" v-model="task.status" type="checkbox" @change="$emit('toggleStatus',task)" />
             </div>
             <div class="col-8 align-content-center">
-                <span :class="'p-0 text-md fw-bold fs-5 '+(task.status ? 'text-decoration-line-through' : '')">{{ task.title }}</span>
+                <span class="text-sm">{{ formatDate(task.date) }}</span>
+                <p :class="'p-0 m-0 text-md fw-bold fs-5 '+(task.status ? 'text-decoration-line-through' : '')"> {{ task.title }}</p>
             </div>
             <div class="row col-3 align-content-center">
                 <a class="col-4 btn text-white" @click="toggleEditModal()" href="#">
@@ -50,8 +51,8 @@
 
                     <div class="mt-3 col-12 row justify-content-end modal-footer">
                         <div class="row col-10">
-                            <input class="col-1 p-2 form-check-input" type="checkbox" name="completed" id="completed" v-model="updated_task.status">
-                            <label class="col-7 text-black" for="completed">Mark as completed</label>
+                            <input class="col-1 p-2 form-check-input" type="checkbox" name="done" id="done" v-model="updated_task.status">
+                            <label class="col-7 text-black" for="done">Mark as done</label>
                         </div>
 
                         <input id="save" class="col-2 btn bg-light-purple align-self-end" type="button" @click="updateTask()" value="Save">
@@ -68,9 +69,11 @@
 
 import { ref, reactive } from 'vue';
 
+const toast = useToast()
+
 const props = defineProps(['task','index'])
 
-defineEmits(['toggleStatus','editTask','deleteTask' ])
+const emit = defineEmits(['toggleStatus','updateTask','deleteTask' ])
 
 let show_description = ref(false)
 let show_edit_modal = ref(false)
@@ -82,8 +85,6 @@ let updated_task = ref({
 })
 let selected_date = ref('')
 
-
-
 const toggleDescription = () => {
     show_description.value = !show_description.value
 }
@@ -92,16 +93,13 @@ const toggleEditModal = () => {
     show_edit_modal.value = !show_edit_modal.value
 }
 
-
-
 const updateTask = () => {
-    
-    props.task.title = updated_task.value.title
-    props.task.status = updated_task.value.status
-    props.task.date = updated_task.value.date
-    props.task.description = updated_task.value.description
-
+    emit('updateTask',[props.task,updated_task.value])
     show_edit_modal.value = false
+}
+
+const formatDate = (date) => {
+    return new Date(date).toJSON().slice(0,10).replace(/-/g,'/')
 }
 
 </script>
