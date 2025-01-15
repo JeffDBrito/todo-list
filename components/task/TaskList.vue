@@ -4,7 +4,7 @@
             <DateFilter @filterByDate="filterByDate"/>
         </div>
         <div class="col-md-3">
-            <TaskNewTask @newTask="newTask"/>
+            <TaskNewTask :taskCount="taskCount" @newTask="newTask"/>
         </div>
 
         <div class="col-md-12 mt-5">
@@ -15,7 +15,7 @@
                 </div>
                 <hr>
                 <div class="" v-if="show_uncompleted">
-                    <TaskUncompletedTask v-for="(task, index) in uncompleted_tasks" :key="task" @deleteTask="deleteTask" :task="task" :index="index"/>
+                    <Task v-for="(task, index) in uncompleted_tasks" :key="task.id" @deleteTask="deleteTask" @toggleStatus="updateTasks" :task="task" :index="index"/>
                 </div>
                     
             </div>
@@ -26,7 +26,7 @@
                 </div>
                 <hr>
                 <div class="" v-if="show_completed">
-                    <TaskCompletedTask v-for="(task, index) in completed_tasks" :key="task" @deleteTask="deleteTask" :task="task" :index="index"/>
+                    <Task v-for="(task, index) in completed_tasks" :key="task.id" @deleteTask="deleteTask" @toggleStatus="updateTasks" :task="task" :index="index"/>
                 </div>
             </div>
         </div>
@@ -37,7 +37,11 @@
 
 import { ref, reactive } from 'vue'
 
+const toast = useToast()
+
+const today = new Date()
 let all_tasks = ref([])
+let taskCount = ref(0)
 let uncompleted_tasks = ref([])
 let completed_tasks = ref([])
 let show_uncompleted = ref(true)
@@ -58,15 +62,22 @@ const toggleCompleted = (show) => {
 }
 
 const newTask = (task) => {
-
     let new_task = {
+        id: task.id,
         title: task.title,
         status: task.status,
         date: task.date,
         description: task.description
     }
 
+    toast.add({
+        title: 'Done!',
+        description: 'Task created with success.',
+        color: 'success'
+    })
+
     all_tasks.value.push(new_task)
+    taskCount.value = taskCount.value + 1
     updateTasks()
 }
 
@@ -76,7 +87,6 @@ const updateTasks = () => {
 }
 
 const deleteTask = (task) => {
-    console.log("deleting task")
     all_tasks.value = all_tasks.value.filter(t => t !== task)
     updateTasks()
 }
