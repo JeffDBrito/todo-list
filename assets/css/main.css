@@ -60,7 +60,7 @@ html{
     color: white;
 }
 
-.task-completed{
+.task-done{
     border-style: solid;
     border-width: 1px;
     border-color: white;
