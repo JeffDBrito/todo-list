@@ -4,6 +4,9 @@ export default defineNuxtConfig({
   devtools: { 
     enabled: true 
   },
+  alias: {
+    css: 'style/css'
+  },
   app: {
     head: {
       link: [
@@ -20,4 +23,5 @@ export default defineNuxtConfig({
       ]
     }
   },
+  css: ['~/assets/css/main.css'],  
 })
