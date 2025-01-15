@@ -1,12 +1,12 @@
 <template>
 
     <div>
-        <div :class="(index%2 == 0 ? 'task-bg-primary' : 'task-bg-secondary' )+' my-2 py-3 px-5 row'">
+        <div :class="(index%2 == 0 ? 'task-bg-primary' : 'task-bg-secondary' )+' my-2 py-3 px-5 row '+ (task.status ? 'task-completed' : '')">
             <div class="col-1 align-content-center">
-                <input class="rounded form-check-input" type="checkbox" @change="$emit('completeTask',index)" />
+                <input class="rounded form-check-input" v-model="task.status" type="checkbox" @change="$emit('toggleStatus',task)" />
             </div>
             <div class="col-8 align-content-center">
-                <span class="p-0 text-md fw-bold fs-5">{{ task.title }}</span>
+                <span :class="'p-0 text-md fw-bold fs-5 '+(task.status ? 'text-decoration-line-through' : '')">{{ task.title }}</span>
             </div>
             <div class="row col-3 align-content-center">
                 <a class="col-4 btn text-white" @click="toggleEditModal()" href="#">
@@ -27,7 +27,7 @@
                 <div class="bg-white p-4 modal-content rounded">
 
                     <div class="text-center row modal-header">
-                        <h3 class="col-11 modal-title text-black">New Task</h3>
+                        <h3 class="col-11 modal-title text-black">Edit Task</h3>
                         <input class="btn-close col-1 text-xs" type="button" @click="show_edit_modal = false" />
                     </div>
 
@@ -39,7 +39,7 @@
                             </div>
                             <div class="mt-3 col-6">
                                 <label class="ml-5" for="date">Date</label>
-                                <input v-model="selected_date" id="date" class="form-control" type="date" @change="setDate()"/>
+                                <input v-model="updated_task.date" id="date" class="form-control" type="date" @change="setDate()"/>
                             </div>
                         </div>
                         <div class="mt-3 col-12">
@@ -54,7 +54,7 @@
                             <label class="col-7 text-black" for="completed">Mark as completed</label>
                         </div>
 
-                        <input id="save" class="col-2 btn bg-light-purple align-self-end" type="button" @click="$emit('newTask',processNewTask())" value="Save">
+                        <input id="save" class="col-2 btn bg-light-purple align-self-end" type="button" @click="updateTask()" value="Save">
                     </div>
 
                 </div>
@@ -66,15 +66,22 @@
 </template>
 <script setup>
 
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 
-defineProps(['task','index'])
+const props = defineProps(['task','index'])
 
-defineEmits(['deleteTask'])
+defineEmits(['toggleStatus','editTask','deleteTask' ])
 
 let show_description = ref(false)
 let show_edit_modal = ref(false)
-let updated_task = ref(null)
+let updated_task = ref({
+    title: props.task.title,
+    status: props.task.status,
+    date: props.task.date,
+    description: props.task.description
+})
+let selected_date = ref('')
+
 
 
 const toggleDescription = () => {
@@ -83,7 +90,18 @@ const toggleDescription = () => {
 
 const toggleEditModal = () => {
     show_edit_modal.value = !show_edit_modal.value
-    updated_task.value = task
+}
+
+
+
+const updateTask = () => {
+    
+    props.task.title = updated_task.value.title
+    props.task.status = updated_task.value.status
+    props.task.date = updated_task.value.date
+    props.task.description = updated_task.value.description
+
+    show_edit_modal.value = false
 }
 
 </script>
