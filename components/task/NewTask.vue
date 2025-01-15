@@ -35,7 +35,7 @@
                             <label class="col-7 text-black" for="completed">Mark as completed</label>
                         </div>
 
-                        <input id="save" class="col-2 btn bg-light-purple align-self-end" type="button" @click="$emit('newTask',processNewTask())" value="Save">
+                        <input id="save" class="col-2 btn bg-light-purple align-self-end" type="button" @click="processNewTask()" value="Save">
                     </div>
 
                 </div>
@@ -48,12 +48,14 @@
 
 import { ref, reactive } from 'vue'
 
-defineEmits(['newTask'])
+const props = defineProps(['taskCount'])
+const emit = defineEmits(['newTask'])
 
 // modal
 let showModal = ref(false)
 let selected_date = ref('')
 let newTask = reactive({
+    id: props.taskCount+1,
     title: '',
     status: false,
     date: '',
@@ -69,8 +71,19 @@ function setDate(){
 }
 
 function processNewTask(){
+    
+    emit('newTask',newTask)
+
     showModal.value = false
-    return newTask
+
+    newTask = {
+        id: props.taskCount+1,
+        title: '',
+        status: false,
+        date: '',
+        description: ''
+    }
+    
 }
 
 </script>
