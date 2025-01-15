@@ -1,7 +1,9 @@
 <template>
   <div class="app-bg app-text">
-    <NuxtLayout>
-      <NuxtPage/>
-    </NuxtLayout>
+    <UApp>
+      <NuxtLayout>
+        <NuxtPage/>
+      </NuxtLayout>
+    </UApp>
   </div>
 </template>
