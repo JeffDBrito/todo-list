@@ -1,0 +1,59 @@
+html{
+    background-color: rgb(102, 0, 128);
+}
+
+.app-bg{
+    background-color: rgb(102, 0, 128);
+}
+
+.app-text{
+    color: white;
+}
+
+
+/* Buttons Background */
+
+.bg-white-purple{
+    background-color: white;
+    color: rgb(102, 0, 128);
+}
+
+.bg-purple{
+    background-color: rgb(102, 0, 128);
+    color: white;
+}
+
+.bg-light-purple{
+    background-color: #b81ad8;
+    color: white;
+}
+
+.bg-dark-purple{
+    background-color: #410360;
+    color: white;
+}
+
+.bg-light-purple:hover{
+    background-color: white;
+    color: #8802a3;
+    box-shadow: gray 0px 0px 3px 0px;
+}
+
+.bg-dark-purple:hover{
+    background-color: white;
+    color: #410360;
+    box-shadow: gray 0px 0px 3px 0px;
+}
+
+
+/* Tasks Background */
+.task-bg-secondary{
+    background-color: #9700b8;
+    color: white;
+}
+
+.task-bg-primary{
+    background-color: #b81ad8;
+    color: white;
+}
+
