@@ -1,5 +1,8 @@
 # ToDo App using Nuxt
 
+This project is available to test on [Netlify](https://jeff-brito-todo-list.netlify.app/).
+
+
 ## Setup
 
 Make sure to install dependencies:
